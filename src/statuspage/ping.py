@@ -29,7 +29,7 @@ class StatusPagePingEvent(commands.Cog):
         dotenv.load_dotenv()
         api_base = os.getenv('API_BASE_STATUS')
         api_key = os.getenv('STATUS_PAGE_API_KEY')
-        page_id = os.getenv('PAGE_ID_PING')
+        page_id = os.getenv('PAGE_ID')
         metric_id = os.getenv('METRIC_ID_PING')
 
         ping = round(self.bot.latency * 1000)
