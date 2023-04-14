@@ -16,7 +16,7 @@ class StatusPageShardsEvent(commands.Cog):
         self.api_url_base = str(os.getenv('API_BASE_STATUS'))
         self.api_key = str(os.getenv('STATUS_PAGE_API_KEY'))
         self.page_id = str(os.getenv('PAGE_ID'))
-        self.metric_id = str(os.getenv('METRIC_ID_SHARDS'))
+        self.metric_id = str(os.getenv('METRIC_ID_SHARD'))
 
 
     @commands.Cog.listener()
