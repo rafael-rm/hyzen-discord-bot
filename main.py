@@ -46,7 +46,7 @@ class App(commands.AutoShardedBot):
                     logging.error(f'{error}')
 
         for file in os.listdir('./src/statuspage/'):
-            if file.endswith('.py') and file == 'ping.py':
+            if file.endswith('.py'):
                 try:
                     logging.info(f'Encontrado arquivo: {(f"./src/statuspage/{file}")}')
                     await self.load_extension(f'src.statuspage.{file[:-3]}')
