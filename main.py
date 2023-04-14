@@ -11,13 +11,14 @@ import configparser
 
 
 class App(commands.AutoShardedBot):
-    def __init__(self, token, shards, intents, prefixo):
+    def __init__(self, token, shards, intents, prefixo, is_testing):
         super().__init__(
             intents = intents,
             command_prefix = prefixo,
             shard_count = shards,
         )
         self.token = token
+        self.is_testing = is_testing
         self.time_start = datetime.datetime.now().timestamp()
         self.firebase = FirebaseDB()
         self.config = configparser.ConfigParser()
@@ -73,7 +74,7 @@ def main():
     dotenv.load_dotenv()
     token = os.getenv('TOKEN-CANARY') if is_testing else os.getenv('TOKEN-PROD')
 
-    asyncio.run(App(token, shards, intents, prefixo).iniciar())
+    asyncio.run(App(token, shards, intents, prefixo, is_testing).iniciar())
 
 
 if __name__ == '__main__':
