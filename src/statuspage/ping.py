@@ -1,3 +1,4 @@
+import asyncio
 from discord.ext import tasks
 from discord.ext import commands
 import logging
@@ -23,8 +24,10 @@ class StatusPagePingEvent(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        self.enviar_ping_status_page.start()
         logging.info(f'Carregado: {__name__}')
+
+        await asyncio.sleep(30)
+        self.enviar_ping_status_page.start()
 
 
     @tasks.loop(seconds=300)
