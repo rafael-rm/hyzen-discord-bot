@@ -56,7 +56,6 @@ class StatusPagePingEvent(commands.Cog):
             logging.info(f'Ping enviado para Status Page com sucesso. Status: {request.status_code}. Ping: {ping}ms.')
         else:
             logging.error(f'Falha ao enviar ping para Status Page. Status: {request.status_code}. Ping: {ping}ms.')
-            logging.error(f'API_URL_BASE: {self.api_url_base} API_KEY: {self.api_key} PAGE_ID: {self.page_id} METRIC_ID: {self.metric_id}')
             logging.error(f'Erro: {request.text}')
 
 
