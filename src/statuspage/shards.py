@@ -1,3 +1,4 @@
+import asyncio
 from discord.ext import tasks
 from discord.ext import commands
 import logging
@@ -24,9 +25,8 @@ class StatusPageShardsEvent(commands.Cog):
     async def on_ready(self):
         logging.info(f'Carregado: {__name__}')
 
+        await asyncio.sleep(15)
 
-    @commands.Cog.listener()
-    async def on_ready(self):
         if self.bot.is_testing == True:
             logging.info('A aplicação está em modo de teste, não será enviado o numero de shards para Status Page.')
             return
@@ -48,6 +48,7 @@ class StatusPageShardsEvent(commands.Cog):
             logging.info(f'Numero de shards enviado para Status Page com sucesso. Status: {request.status_code}. Shards: {self.bot.shard_count}.')
         else:
             logging.error(f'Falha ao enviar o numero de shards para Status Page. Status: {request.status_code}. Shards: {self.bot.shard_count}.')
+            logging.error(f'API_URL_BASE: {API_URL_BASE}\n API_KEY: {API_KEY}\n PAGE_ID: {PAGE_ID}\n METRIC_ID: {METRIC_ID}')
             logging.error(f'Erro: {request.text}')
 
 
