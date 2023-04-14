@@ -13,6 +13,7 @@ class StatusPageShardsEvent(commands.Cog):
         self.bot = bot
         dotenv.load_dotenv()
         config = configparser.ConfigParser()
+        config.read('config.conf')
         self.api_url_base = config.get('STATUSPAGE', 'API_URL_BASE')
         self.api_key = str(os.getenv('STATUS_PAGE_API_KEY'))
         self.page_id = str(os.getenv('PAGE_ID'))
