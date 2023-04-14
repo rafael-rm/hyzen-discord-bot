@@ -9,23 +9,19 @@ import json
 import datetime
 
 
-dotenv.load_dotenv()
-API_URL_BASE = str(os.getenv('API_BASE_STATUS'))
-API_KEY = str(os.getenv('STATUS_PAGE_API_KEY'))
-PAGE_ID = str(os.getenv('PAGE_ID'))
-METRIC_ID = str(os.getenv('METRIC_ID_SHARDS'))
-
-
 class StatusPageShardsEvent(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        dotenv.load_dotenv()
+        self.api_url_base = str(os.getenv('API_BASE_STATUS'))
+        self.api_key = str(os.getenv('STATUS_PAGE_API_KEY'))
+        self.page_id = str(os.getenv('PAGE_ID'))
+        self.metric_id = str(os.getenv('METRIC_ID_SHARDS'))
 
 
     @commands.Cog.listener()
     async def on_ready(self):
         logging.info(f'Carregado: {__name__}')
-
-        await asyncio.sleep(15)
 
         if self.bot.is_testing == True:
             logging.info('A aplicação está em modo de teste, não será enviado o numero de shards para Status Page.')
@@ -38,9 +34,9 @@ class StatusPageShardsEvent(commands.Cog):
                     }
         })
 
-        headers = {"Content-Type": "application/json", "Authorization": "OAuth " + API_KEY}
+        headers = {"Content-Type": "application/json", "Authorization": "OAuth " + self.api_key}
 
-        url = f'https://{API_URL_BASE}/pages/{PAGE_ID}/metrics/{METRIC_ID}/data.json'
+        url = f'https://{self.api_url_base}/pages/{self.page_id}/metrics/{self.metric_id}/data.json'
 
         request = requests.post(url, data=params, headers=headers)
 
@@ -48,7 +44,7 @@ class StatusPageShardsEvent(commands.Cog):
             logging.info(f'Numero de shards enviado para Status Page com sucesso. Status: {request.status_code}. Shards: {self.bot.shard_count}.')
         else:
             logging.error(f'Falha ao enviar o numero de shards para Status Page. Status: {request.status_code}. Shards: {self.bot.shard_count}.')
-            logging.error(f'API_URL_BASE: {API_URL_BASE}\n API_KEY: {API_KEY}\n PAGE_ID: {PAGE_ID}\n METRIC_ID: {METRIC_ID}')
+            logging.error(f'API_URL_BASE: {self.api_url_base} API_KEY: {self.api_key} PAGE_ID: {self.page_id} METRIC_ID: {self.metric_id}')
             logging.error(f'Erro: {request.text}')
 
 
