@@ -1,11 +1,10 @@
-import asyncio
-from discord.ext import tasks
 from discord.ext import commands
 import logging
 import dotenv
 import requests
 import os
 import json
+import configparser
 import datetime
 
 
@@ -13,10 +12,11 @@ class StatusPageShardsEvent(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         dotenv.load_dotenv()
-        self.api_url_base = str(os.getenv('API_BASE_STATUS'))
+        config = configparser.ConfigParser()
+        self.api_url_base = config.get('STATUSPAGE', 'API_URL_BASE')
         self.api_key = str(os.getenv('STATUS_PAGE_API_KEY'))
         self.page_id = str(os.getenv('PAGE_ID'))
-        self.metric_id = str(os.getenv('METRIC_ID_SHARD'))
+        self.metric_id = config.get('STATUSPAGE', 'METRIC_ID_SHARDS')
 
 
     @commands.Cog.listener()
