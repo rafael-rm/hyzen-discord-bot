@@ -27,7 +27,6 @@ class StatusPageShardsEvent(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        
         if self.bot.is_testing == True:
             logging.info('A aplicação está em modo de teste, não será enviado o numero de shards para Status Page.')
             return

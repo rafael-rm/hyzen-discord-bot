@@ -28,7 +28,6 @@ class StatusPagePingEvent(commands.Cog):
 
     @tasks.loop(seconds=300)
     async def enviar_ping_status_page(self):
-
         if self.bot.is_testing == True:
             logging.info('A aplicação está em modo de teste, não será enviado ping para Status Page.')
             return

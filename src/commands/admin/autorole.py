@@ -23,7 +23,6 @@ class AutoRoleCommands(commands.GroupCog, name="autorole", description="Comandos
     @app_commands.checks.has_permissions(manage_roles=True)
     @app_commands.checks.bot_has_permissions(manage_roles=True)
     async def adicionar(self, interaction: discord.Interaction, cargo: discord.Role):
-
         if cargo.id == interaction.guild.id:
             await interaction.response.send_message('Não posso adicionar o cargo **everyone** no autorole.')
             await comando_executado(interaction, self.bot)
