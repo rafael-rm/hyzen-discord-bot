@@ -1,3 +1,4 @@
+import asyncio
 from discord.ext import commands
 import logging
 import dotenv
@@ -23,6 +24,8 @@ class StatusPageShardsEvent(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         logging.info(f'Carregado: {__name__}')
+
+        await asyncio.sleep(30)
 
         if self.bot.is_testing == True:
             logging.info('A aplicação está em modo de teste, não será enviado o numero de shards para Status Page.')
