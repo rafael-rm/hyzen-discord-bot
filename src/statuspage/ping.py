@@ -19,7 +19,7 @@ class StatusPagePingEvent(commands.Cog):
         self.api_url_base = config.get('STATUSPAGE', 'API_URL_BASE')
         self.api_key = str(os.getenv('STATUS_PAGE_API_KEY'))
         self.page_id = str(os.getenv('PAGE_ID'))
-        self.metric_id = config.get('STATUSPAGE', 'METRIC_ID_SHARDS')
+        self.metric_id = config.get('STATUSPAGE', 'METRIC_ID_PING')
 
 
     @commands.Cog.listener()
