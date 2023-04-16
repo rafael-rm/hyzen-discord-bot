@@ -25,7 +25,6 @@ class StatusPagePingEvent(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         logging.info(f'Carregado: {__name__}')
-
         await asyncio.sleep(30)
         self.enviar_ping_status_page.start()
 
