@@ -191,7 +191,7 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
         config = configparser.ConfigParser()
         config.read('config.conf')
         embed = discord.Embed(color=self.bot.color_embed_default)
-        embed.set_author(name=f"Configurações da aplicação {self.bot.user.name}#{self.bot.user.discriminator}", icon_url="https://i.imgur.com/GnuyG9s.png")
+        embed.set_author(name=f"Configurações da aplicação {self.bot.user.name}#{self.bot.user.discriminator}", icon_url=self.bot.user.avatar)
         embed.set_thumbnail(url=self.bot.user.avatar)
         embed.set_footer(text=f"config.conf ({round(os.path.getsize('config.conf') / 1024, 2)}KB)")
 
@@ -199,7 +199,7 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
         for section in config.sections():
             mensagem += f"**[{section}]**\n"
             for key, value in config.items(section):
-                mensagem += f"**{key}** = {value}\n"
+                mensagem += f"**{key}** = `{value}`\n"
             mensagem += "\n"
 
         embed.description = f'{mensagem}'
