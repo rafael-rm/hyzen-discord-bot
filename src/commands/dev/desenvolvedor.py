@@ -1,3 +1,4 @@
+import configparser
 import discord
 from discord import app_commands
 from discord.ext import commands
@@ -68,14 +69,14 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
         await interaction.response.send_message(f"A aplicação encontra-se com **{round(self.bot.latency * 1000)}ms** de latência") 
 
 
-    @app_commands.command(name='ram', description='Mostra o uso de RAM do servidor.')
+    @app_commands.command(name='ram', description='Mostra o uso de RAM da máquina.')
     @permissao_usar_cmd()
     async def ram(self, interaction: discord.Interaction):
         await comando_executado(interaction, self.bot)
         await interaction.response.send_message(f"A máquina encontra-se utilizando **{psutil.virtual_memory().used / 1024 / 1024:.0f}/{psutil.virtual_memory().total / 1024 / 1024:.0f}MB ({psutil.virtual_memory().percent}%)** de RAM")
 
 
-    @app_commands.command(name='cpu', description='Mostra o uso da CPU do servidor.')
+    @app_commands.command(name='cpu', description='Mostra o uso da CPU da máquina.')
     @permissao_usar_cmd()
     async def cpu(self, interaction: discord.Interaction):
         await comando_executado(interaction, self.bot)
@@ -93,7 +94,7 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
         logging.info('Aplicação sincronizada com o Discord.')
 
 
-    @app_commands.command(name='shard', description='Mostra informações sobre os shards.')
+    @app_commands.command(name='shard', description='Mostra informações sobre as shards da aplicação.')
     @permissao_usar_cmd()
     async def shard(self, interaction: discord.Interaction):
         await comando_executado(interaction, self.bot)
@@ -183,6 +184,22 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
         os.remove('Backup.zip')
 
     
+    @app_commands.command(name='configs', description='Lista todas as configurações da aplicação.')
+    @permissao_usar_cmd()
+    async def configs(self, interaction: discord.Interaction):
+        await comando_executado(interaction, self.bot)
+        config = configparser.ConfigParser()
+        config.read('config.conf')
+        mensagem = "```ini\n"
+        for section in config.sections():
+            mensagem += f"[{section}]\n"
+            for key, value in config.items(section):
+                mensagem += f"{key} = {value}\n"
+            mensagem += "\n"
+        mensagem += "```"
+        await interaction.response.send_message(mensagem, ephemeral=False)
+
+
     @ping.error
     @ram.error
     @cpu.error
@@ -192,6 +209,7 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
     @status.error
     @logs.error
     @backup.error
+    @configs.error
     async def erros(self, interaction: discord.Interaction, error):
         await comando_executado_erro(interaction, error, critical=True)
         if isinstance(error, app_commands.CheckFailure):
