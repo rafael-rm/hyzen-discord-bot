@@ -94,22 +94,25 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
         logging.info('Aplicação sincronizada com o Discord.')
 
 
-    @app_commands.command(name='shard', description='Mostra informações sobre as shards da aplicação.')
+    @app_commands.command(name='shards', description='Mostra informações sobre as shards da aplicação.')
     @permissao_usar_cmd()
     async def shard(self, interaction: discord.Interaction):
         await comando_executado(interaction, self.bot)
+        embed = discord.Embed(title="Informações sobre as shards da aplicação", color=self.bot.color_embed_default)
         if interaction.guild is not None:
             mensagem = f"A aplicação possui **{self.bot.shard_count} shards.** \nShard atual: **{interaction.guild.shard_id}** \nPing médio: **{round(self.bot.latency * 1000)}ms**```autohotkey"
             for shard in self.bot.latencies:
                 mensagem += f"\nShard {shard[0]}: {round(shard[1] * 1000)}ms"
             mensagem += "```"
-            await interaction.response.send_message(mensagem)
+            embed.description = mensagem
+            await interaction.response.send_message(embed=embed)
         else:
             mensagem = f"A aplicação possui **{self.bot.shard_count} shards.** \nShard atual: **0** \nPing médio: **{round(self.bot.latency * 1000)}ms**```autohotkey"
             for shard in self.bot.latencies:
                 mensagem += f"\nShard {shard[0]}: {round(shard[1] * 1000)}ms"
             mensagem = mensagem + "```"
-            await interaction.response.send_message(f"{mensagem}")
+            embed.description = mensagem
+            await interaction.response.send_message(embed=embed)
 
 
     @app_commands.command(name='uptime', description='Mostra o tempo de atividade da aplicação.')
@@ -125,7 +128,6 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
     @permissao_usar_cmd()
     async def status(self, interaction: discord.Interaction):
         await comando_executado(interaction, self.bot)
-        embed = discord.Embed(title="Status da aplicação", color=self.bot.color_embed_default)
         embed.set_thumbnail(url=self.bot.user.avatar)
         embed.description = f"\
             \n**Nome:** {self.bot.user.name}\
