@@ -1,5 +1,5 @@
 import asyncio
-from asyncio import tasks
+from discord.ext import tasks
 from discord.ext import commands
 import logging
 import dotenv
@@ -17,16 +17,29 @@ class StatusPageShardsEvent(commands.Cog):
         config = configparser.ConfigParser()
         config.read('config.conf')
         self.api_url_base = config.get('STATUSPAGE', 'API_URL_BASE')
-        self.api_key = str(os.getenv('STATUS_PAGE_API_KEY'))
-        self.page_id = str(os.getenv('PAGE_ID'))
+        self.page_id = config.get('STATUSPAGE', 'PAGE_ID')
         self.metric_id = config.get('STATUSPAGE', 'METRIC_ID_SHARDS')
+        self.api_key = str(os.getenv('STATUS_PAGE_API_KEY'))
 
 
     @commands.Cog.listener()
     async def on_ready(self):
         logging.info(f'Carregado: {__name__}')
-        await asyncio.sleep(30)
-        self.enviar_shards_status_page.start()
+
+        await asyncio.sleep(15)
+        config = configparser.ConfigParser()
+        config.read('config.conf')
+        enviar_metricas = config.getboolean('STATUSPAGE', 'ENVIAR_METRICAS')
+
+        if self.bot.is_testing == True:
+            logging.info('A aplicação está em modo de teste, não será enviado o numero de shards para Status Page.')
+            return
+
+        if enviar_metricas == True:
+            self.enviar_ping_status_page.start()
+        else:
+            logging.info('A aplicação não está configurada para enviar métricas de shards para Status Page.')
+            return
 
 
     @tasks.loop(seconds=900)
