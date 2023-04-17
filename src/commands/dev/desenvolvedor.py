@@ -128,6 +128,7 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
     @permissao_usar_cmd()
     async def status(self, interaction: discord.Interaction):
         await comando_executado(interaction, self.bot)
+        embed = discord.Embed(title="Informações sobre a aplicação", color=self.bot.color_embed_default)
         embed.set_thumbnail(url=self.bot.user.avatar)
         embed.description = f"\
             \n**Nome:** {self.bot.user.name}\
