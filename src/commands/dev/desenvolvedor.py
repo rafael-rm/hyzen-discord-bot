@@ -183,21 +183,24 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
         await interaction.edit_original_response(content="Backup concluído, arquivos enviados na DM.")
         os.remove('Backup.zip')
 
-    
+
     @app_commands.command(name='configs', description='Lista todas as configurações da aplicação.')
     @permissao_usar_cmd()
     async def configs(self, interaction: discord.Interaction):
         await comando_executado(interaction, self.bot)
         config = configparser.ConfigParser()
         config.read('config.conf')
-        mensagem = "```ini\n"
+        embed = discord.Embed(title="Configurações da aplicação", color=self.bot.color_embed_default)
+        mensagem = ""
+
         for section in config.sections():
             mensagem += f"[{section}]\n"
             for key, value in config.items(section):
                 mensagem += f"{key} = {value}\n"
             mensagem += "\n"
-        mensagem += "```"
-        await interaction.response.send_message(mensagem, ephemeral=False)
+
+        embed.description = f'```ini\n{mensagem}```'
+        await interaction.response.send_message(embed=embed)
 
 
     @ping.error
