@@ -195,17 +195,19 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
         config.read('config.conf')
         embed = discord.Embed(color=self.bot.color_embed_default)
         embed.set_author(name=f"Configurações da aplicação {self.bot.user.name}#{self.bot.user.discriminator}", icon_url=self.bot.user.avatar)
-        embed.set_thumbnail(url=self.bot.user.avatar)
-        embed.set_footer(text=f"config.conf ({round(os.path.getsize('config.conf') / 1024, 2)}KB)")
+
+        num_configs = 0
+        for section in config.sections():
+            num_configs += len(config.items(section))
+        embed.set_footer(text=f"config.conf ({round(os.path.getsize('config.conf') / 1024, 2)}KB) ({num_configs} configs)")
 
         mensagem = ""
         for section in config.sections():
-            mensagem += f"**[{section}]**\n"
+            mensagem += f"[{section}]\n"
             for key, value in config.items(section):
-                mensagem += f"**{key}** = `{value}`\n"
+                mensagem += f"{key} = {value}\n"
             mensagem += "\n"
-
-        embed.description = f'{mensagem}'
+        embed.description = f'Exibindo todas as configurações da aplicação presente no arquivo `config.conf`.\n```ini\n{mensagem}```'
         await interaction.response.send_message(embed=embed)
 
 
