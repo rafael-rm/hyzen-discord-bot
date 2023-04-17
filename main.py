@@ -74,6 +74,7 @@ def main():
     dotenv.load_dotenv()
     token = os.getenv('TOKEN-CANARY') if is_testing else os.getenv('TOKEN-PROD')
 
+    logging.info(f'Iniciando aplicação em modo de {"teste" if is_testing else "produção"}...')
     asyncio.run(App(token, shards, intents, prefixo, is_testing).iniciar())
 
 
