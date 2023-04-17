@@ -190,16 +190,19 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
         await comando_executado(interaction, self.bot)
         config = configparser.ConfigParser()
         config.read('config.conf')
-        embed = discord.Embed(title="Configurações da aplicação", color=self.bot.color_embed_default)
-        mensagem = ""
+        embed = discord.Embed(color=self.bot.color_embed_default)
+        embed.set_author(name=f"Configurações da aplicação {self.bot.user.name}#{self.bot.user.discriminator}", icon_url="https://i.imgur.com/GnuyG9s.png")
+        embed.set_thumbnail(url=self.bot.user.avatar)
+        embed.set_footer(text=f"config.conf ({round(os.path.getsize('config.conf') / 1024, 2)}KB)")
 
+        mensagem = ""
         for section in config.sections():
-            mensagem += f"[{section}]\n"
+            mensagem += f"**[{section}]**\n"
             for key, value in config.items(section):
-                mensagem += f"{key} = {value}\n"
+                mensagem += f"**{key}** = {value}\n"
             mensagem += "\n"
 
-        embed.description = f'```ini\n{mensagem}```'
+        embed.description = f'{mensagem}'
         await interaction.response.send_message(embed=embed)
 
 
