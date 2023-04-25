@@ -13,9 +13,9 @@ import configparser
 class App(commands.AutoShardedBot):
     def __init__(self, token, shards, intents, prefixo, is_testing):
         super().__init__(
-            intents = intents,
-            command_prefix = prefixo,
-            shard_count = shards,
+            intents=intents,
+            command_prefix=prefixo,
+            shard_count=shards,
         )
         self.token = token
         self.is_testing = is_testing

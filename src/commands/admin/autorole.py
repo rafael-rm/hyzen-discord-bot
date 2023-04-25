@@ -60,7 +60,7 @@ class AutoRoleCommands(commands.GroupCog, name="autorole", description="Comandos
             request.append(str(cargo.id))
             db.reference('/servidores/' + str(interaction.guild.id) + '/autorole').set(request)
             await interaction.response.send_message('Cargo adicionado com sucesso.')
-            
+
         await comando_executado(interaction, self.bot)
 
 
@@ -90,15 +90,15 @@ class AutoRoleCommands(commands.GroupCog, name="autorole", description="Comandos
     @app_commands.checks.has_permissions(manage_roles=True)
     async def listar(self, interaction: discord.Interaction):
         request = db.reference('/servidores/' + str(interaction.guild.id) + '/autorole').get()
-        if request is not None:
+        if request is None:
+            await interaction.response.send_message('Não há cargos no autorole.')
+        else:
             cargos = ''
             for i in range(0, len(request)):
                 cargos += f'<@&{request[i]}>\n'
             embed = discord.Embed(title='', description=cargos, color=self.bot.color_embed_default)
             embed.set_author(name='Cargos configurados para serem adicionados quando um novo usuário entrar no servidor.')
             await interaction.response.send_message(embed=embed)
-        else: 
-            await interaction.response.send_message('Não há cargos no autorole.')
         await comando_executado(interaction, self.bot)
 
 
