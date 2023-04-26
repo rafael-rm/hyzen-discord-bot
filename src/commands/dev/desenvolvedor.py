@@ -40,7 +40,7 @@ class ButtonsDevelopersCommands(discord.ui.View):
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user.id != self.author.id:
             await interaction.response.send_message("Você não possui permissão para utilizar esta interação.", ephemeral=True)
-            logging.warn(f"O usuário {interaction.user.id} tentou utilizar uma interação do comando de logs no servidor {interaction.guild.id} no canal {interaction.channel.id} sem permissão.")
+            logging.warning(f"O usuário {interaction.user.id} tentou utilizar uma interação do comando de logs no servidor {interaction.guild.id} no canal {interaction.channel.id} sem permissão.")
             return False
         return True
 

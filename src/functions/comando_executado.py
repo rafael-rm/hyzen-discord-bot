@@ -58,7 +58,7 @@ async def tentativa_comando_critico(comando):
         else:
             local = f'no servidor {comando.guild.id}' 
 
-        logging.warn(f'Tentativa de execução de comando crítico ({comando.command.name}) por {autor.id} {local}.')
+        logging.warning(f'Tentativa de execução de comando crítico ({comando.command.name}) por {autor.id} {local}.')
 
 
 async def contador_comandos(bot):  
