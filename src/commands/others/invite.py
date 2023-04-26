@@ -22,16 +22,18 @@ class InviteCommand(commands.Cog):
         invite_bot = f'https://discord.com/api/oauth2/authorize?client_id={self.bot.user.id}&permissions=8&scope=bot%20applications.commands'
         invite_guild = self.bot.config.get('INVITES', 'SUPPORT_SERVER')
 
-        mensagem = f'Olá, eu sou o **{self.bot.user.name}** e estou aqui para te ajudar a gerenciar seu servidor!\n\n' \
-                   f'Para me **adicionar** em seu servidor, clique [aqui]({invite_bot}).\n\nSe você tiver alguma dúvida, ' \
-                   f'entre em meu servidor de **suporte** clicando [aqui]({invite_guild}).'
+        mensagem = f'Olá, eu sou o **{self.bot.user.name}** e estou aqui para te ajudar a gerenciar seu servidor!\n' \
+                   f'Para me **adicionar** em seu servidor, clique [aqui]({invite_bot}).'
 
         embed = discord.Embed(
-            title = '',
-            description = mensagem,
-            color = self.bot.color_embed_default,
+            title='',
+            description=mensagem,
+            color=self.bot.color_embed_default,
         )
-        embed.set_author(name='Convite', icon_url='https://i.imgur.com/4uf1erS.png')
+        embed.set_author(name='Convite')
+
+        guilds = len(self.bot.guilds)
+        embed.set_footer(text=f'Atualmente me encontro em {guilds} servidores.')
 
         await interaction.response.send_message(embed=embed)
         await comando_executado(interaction, self.bot)
