@@ -67,6 +67,7 @@ class AutoRoleCommands(commands.GroupCog, name="autorole", description="Comandos
     @app_commands.command(name='remover', description='Remove um cargo ao autorole.')
     @app_commands.describe(cargo='Cargo que será removido do autorole.')
     @app_commands.checks.has_permissions(manage_roles=True)
+    @app_commands.checks.bot_has_permissions(manage_roles=True)
     async def remover(self, interaction: discord.Interaction, cargo: discord.Role):
         request = db.reference('/servidores/' + str(interaction.guild.id) + '/autorole').get()
         cargo_encontrado = False
@@ -88,6 +89,7 @@ class AutoRoleCommands(commands.GroupCog, name="autorole", description="Comandos
 
     @app_commands.command(name='listar', description='Lista os cargos do autorole.')
     @app_commands.checks.has_permissions(manage_roles=True)
+    @app_commands.checks.bot_has_permissions(manage_roles=True)
     async def listar(self, interaction: discord.Interaction):
         request = db.reference('/servidores/' + str(interaction.guild.id) + '/autorole').get()
         if request is None:
@@ -107,8 +109,10 @@ class AutoRoleCommands(commands.GroupCog, name="autorole", description="Comandos
     @listar.error
     async def erros(self, interaction: discord.Interaction, error):
         await comando_executado_erro(interaction, error, critical=False)
-        if isinstance(error, app_commands.CheckFailure):
+        if isinstance(error, app_commands.MissingPermissions):
             await interaction.response.send_message("Você não tem permissão para executar esse comando.", ephemeral=False)
+        elif isinstance(error, app_commands.BotMissingPermissions):
+            await interaction.response.send_message("A aplicação não tem permissões suficientes para executar esse comando, verifique se a permissão de `Gerenciar Cargos` está ativada.", ephemeral=False)
         else:
             await interaction.response.send_message("Ocorreu um erro ao executar o comando.", ephemeral=False)
 

@@ -52,10 +52,10 @@ class ClearCommand(commands.Cog):
     @clear.error
     async def erros(self, interaction: discord.Interaction, error):
         await comando_executado_erro(interaction, error, critical=False)
-        if isinstance(error, app_commands.CheckFailure):
+        if isinstance(error, app_commands.MissingPermissions):
             await interaction.response.send_message("Você não tem permissão para executar esse comando.", ephemeral=False)
         elif isinstance(error, app_commands.errors.BotMissingPermissions):
-            await interaction.response.send_message("O bot não tem permissão para executar esse comando, verifique se ele tem a permissão `Gerenciar mensagens`.", ephemeral=False)
+            await interaction.response.send_message("A aplicação não tem permissões suficientes para executar esse comando, verifique se a permissão de `Gerenciar Mensagens` está ativada.", ephemeral=False)
         else:
             await interaction.response.send_message("Ocorreu um erro ao executar o comando.", ephemeral=False)
 

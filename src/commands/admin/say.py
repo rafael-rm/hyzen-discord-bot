@@ -20,7 +20,6 @@ class SayCommand(commands.Cog):
     @app_commands.describe(mensagem='Mensagem a ser enviada através do bot.')
     @app_commands.guild_only()
     @app_commands.checks.has_permissions(manage_messages=True)
-    @app_commands.checks.bot_has_permissions(embed_links=True, send_messages=True)
     async def say(self, interaction: discord.Interaction, *, mensagem: str):
         embed = discord.Embed(
             title = '',
@@ -45,11 +44,9 @@ class SayCommand(commands.Cog):
     async def erros(self, interaction: discord.Interaction, error):
         await comando_executado_erro(interaction, error, critical=False)
         if isinstance(error, app_commands.MissingPermissions):
-            await interaction.response.send_message("Você não tem permissão para executar esse comando.", ephemeral=True)
-        elif isinstance(error, app_commands.BotMissingPermissions):
-            await interaction.response.send_message("O bot não tem permissão para executar esse comando, verifique se ele tem a permissão `Enviar mensagens` e `Inserir links`.", ephemeral=True)
+            await interaction.response.send_message("Você não tem permissão para executar esse comando.", ephemeral=False)
         else:
-            await interaction.response.send_message("Ocorreu um erro ao executar o comando.", ephemeral=True)
+            await interaction.response.send_message("Ocorreu um erro ao executar o comando.", ephemeral=False)
 
 
 async def setup(bot: commands.Bot) -> None:

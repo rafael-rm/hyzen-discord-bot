@@ -87,7 +87,7 @@ class MixCommands(commands.GroupCog, name='mix', description='Comandos para orga
     @sortear.error
     async def erros(self, interaction: discord.Interaction, error):
         await comando_executado_erro(interaction, error, critical=False)
-        await interaction.response.send_message('Ocorreu um erro ao executar este comando. Por favor, tente novamente mais tarde.')
+        await interaction.response.send_message("Ocorreu um erro ao executar o comando.", ephemeral=False)
 
 
 async def setup(bot: commands.Bot) -> None:

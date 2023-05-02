@@ -42,12 +42,7 @@ class InviteCommand(commands.Cog):
     @invite.error
     async def erros(self, interaction: discord.Interaction, error):
         await comando_executado_erro(interaction, error, critical=False)
-        if isinstance(error, app_commands.MissingPermissions):
-            await interaction.response.send_message("Você não tem permissão para executar esse comando.", ephemeral=True)
-        elif isinstance(error, app_commands.BotMissingPermissions):
-            await interaction.response.send_message("O bot não tem permissão para executar esse comando, verifique se ele tem a permissão `Enviar mensagens` e `Inserir links`.", ephemeral=True)
-        else:
-            await interaction.response.send_message("Ocorreu um erro ao executar o comando.", ephemeral=True)
+        await interaction.response.send_message("Ocorreu um erro ao executar o comando.", ephemeral=False)
 
 
 async def setup(bot: commands.Bot) -> None:
