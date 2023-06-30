@@ -6,7 +6,7 @@ import dotenv
 import sys
 
 
-class FirebaseDB():
+class FirebaseDB:
     def __init__(self):
         logging.info('Iniciando conexão com o Firebase')
         try:

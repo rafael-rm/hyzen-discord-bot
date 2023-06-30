@@ -10,15 +10,12 @@ class InviteCommand(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-
     @commands.Cog.listener()
     async def on_ready(self):
         logging.info(f'Carregado: {__name__}')
 
-
     @app_commands.command(name='invite', description='Convidar o bot para o seu servidor.')
     async def invite(self, interaction: discord.Interaction):
-
         invite_bot = f'https://discord.com/api/oauth2/authorize?client_id={self.bot.user.id}&permissions=8&scope=bot%20applications.commands'
         invite_guild = self.bot.config.get('INVITES', 'SUPPORT_SERVER')
 
@@ -37,7 +34,6 @@ class InviteCommand(commands.Cog):
 
         await interaction.response.send_message(embed=embed)
         await comando_executado(interaction, self.bot)
-
 
     @invite.error
     async def erros(self, interaction: discord.Interaction, error):

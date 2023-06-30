@@ -13,7 +13,6 @@ class ActivityEvent(commands.Cog):
         self.bot = bot
         self.status = []
 
-
     @commands.Cog.listener()
     async def on_ready(self):
         logging.info(f'Carregado: {__name__}')
@@ -24,7 +23,6 @@ class ActivityEvent(commands.Cog):
 
         self.status = json.loads(config.get('CLIENT', 'ACTIVITY'))
         self.alterar_status.start()
-
 
     @tasks.loop(seconds=600)
     async def alterar_status(self):

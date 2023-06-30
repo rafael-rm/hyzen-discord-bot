@@ -10,11 +10,9 @@ class AvatarCommand(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-
     @commands.Cog.listener()
     async def on_ready(self):
         logging.info(f'Carregado: {__name__}')
-
 
     @app_commands.command(name='avatar', description='Exibe o seu avatar ou o de outro usuário.')
     @app_commands.describe(usuario='Usuário para exibir o avatar.')
@@ -38,7 +36,6 @@ class AvatarCommand(commands.Cog):
 
         await interaction.response.send_message(embed=embed)
         await comando_executado(interaction, self.bot)
-
 
     @avatar.error
     async def erros(self, interaction: discord.Interaction, error):

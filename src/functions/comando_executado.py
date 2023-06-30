@@ -19,7 +19,7 @@ async def comando_executado(comando, bot):
     else:
         local = f'no servidor {comando.guild.id}' 
 
-    logging.info(f'Comando \'{comando.command.name}\' executado por {autor.id} {local}.')
+    logging.info(f'Comando \'{comando.command.qualified_name}\' executado por {autor.id} {local}.')
     await contador_comandos(bot)
 
 
@@ -32,17 +32,17 @@ async def comando_executado_erro(comando, erro, critical):
     if comando.guild is None: 
         local = 'via DM'
     else:
-        local = f'no servidor {comando.guild.id}' 
-
-    msg = f'Ocorreu um erro durante a execução do comando \'{comando.command.name}\'. O comando havia sido executado por {autor.id} {local}.'
+        local = f'no servidor {comando.guild.id}'
 
     if isinstance(erro, commands.CheckFailure) or isinstance(erro, commands.MissingPermissions) or isinstance(erro, app_commands.CheckFailure):
-        msg = f'O usuário {autor.id} tentou executar o comando \'{comando.command.name}\' {local}, mas não possui permissão para isso.'
+        msg = f'O usuário {autor.id} tentou executar o comando \'{comando.command.qualified_name}\' {local}, mas não ' \
+              f'possui permissão para isso.'
         logging.info(msg)
         if critical:
             await tentativa_comando_critico(comando)
     else:
-        msg = f'Ocorreu um erro durante a execução do comando \'{comando.command.name}\'. O comando havia sido executado por {autor.id} {local}.'
+        msg = f'Ocorreu um erro durante a execução do comando \'{comando.command.qualified_name}\'. O comando havia ' \
+              f'sido executado por {autor.id} {local}.'
         logging.warning(msg)
         logging.error(f'{erro}')
 
@@ -58,7 +58,7 @@ async def tentativa_comando_critico(comando):
         else:
             local = f'no servidor {comando.guild.id}' 
 
-        logging.warning(f'Tentativa de execução de comando crítico ({comando.command.name}) por {autor.id} {local}.')
+        logging.warning(f'Tentativa de execução de comando crítico ({comando.command.qualified_name}) por {autor.id} {local}.')
 
 
 async def contador_comandos(bot):  

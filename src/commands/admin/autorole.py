@@ -12,11 +12,9 @@ class AutoRoleCommands(commands.GroupCog, name="autorole", description="Comandos
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-
     @commands.Cog.listener()
     async def on_ready(self):
         logging.info(f'Carregado: {__name__}')
-
 
     @app_commands.command(name='adicionar', description='Adiciona um cargo ao autorole.')
     @app_commands.describe(cargo='Cargo que será adicionado ao autorole.')
@@ -34,12 +32,14 @@ class AutoRoleCommands(commands.GroupCog, name="autorole", description="Comandos
             return
 
         if cargo.position >= interaction.guild.me.top_role.position:
-            await interaction.response.send_message('O cargo que deseja adicionar no autorole é maior ou igual ao meu cargo. Não posso adicionar.')
+            await interaction.response.send_message(
+                'O cargo que deseja adicionar no autorole é maior ou igual ao meu cargo. Não posso adicionar.')
             await comando_executado(interaction, self.bot)
             return
 
         if cargo.position > interaction.user.top_role.position and not interaction.user.guild_permissions.administrator:
-            await interaction.response.send_message('O cargo que deseja adicionar no autorole é maior que o seu cargo. Não posso adicionar.')
+            await interaction.response.send_message(
+                'O cargo que deseja adicionar no autorole é maior que o seu cargo. Não posso adicionar.')
             await comando_executado(interaction, self.bot)
             return
 
@@ -63,7 +63,6 @@ class AutoRoleCommands(commands.GroupCog, name="autorole", description="Comandos
 
         await comando_executado(interaction, self.bot)
 
-
     @app_commands.command(name='remover', description='Remove um cargo ao autorole.')
     @app_commands.describe(cargo='Cargo que será removido do autorole.')
     @app_commands.checks.has_permissions(manage_roles=True)
@@ -86,7 +85,6 @@ class AutoRoleCommands(commands.GroupCog, name="autorole", description="Comandos
 
         await comando_executado(interaction, self.bot)
 
-
     @app_commands.command(name='listar', description='Lista os cargos do autorole.')
     @app_commands.checks.has_permissions(manage_roles=True)
     @app_commands.checks.bot_has_permissions(manage_roles=True)
@@ -99,10 +97,10 @@ class AutoRoleCommands(commands.GroupCog, name="autorole", description="Comandos
             for i in range(0, len(request)):
                 cargos += f'<@&{request[i]}>\n'
             embed = discord.Embed(title='', description=cargos, color=self.bot.color_embed_default)
-            embed.set_author(name='Cargos configurados para serem adicionados quando um novo usuário entrar no servidor.')
+            embed.set_author(
+                name='Cargos configurados para serem adicionados quando um novo usuário entrar no servidor.')
             await interaction.response.send_message(embed=embed)
         await comando_executado(interaction, self.bot)
-
 
     @adicionar.error
     @remover.error
@@ -110,9 +108,13 @@ class AutoRoleCommands(commands.GroupCog, name="autorole", description="Comandos
     async def erros(self, interaction: discord.Interaction, error):
         await comando_executado_erro(interaction, error, critical=False)
         if isinstance(error, app_commands.MissingPermissions):
-            await interaction.response.send_message("Você não tem permissão para executar esse comando.", ephemeral=False)
+            await interaction.response.send_message("Você não tem permissão para executar esse comando.",
+                                                    ephemeral=False)
         elif isinstance(error, app_commands.BotMissingPermissions):
-            await interaction.response.send_message("A aplicação não tem permissões suficientes para executar esse comando, verifique se a permissão de `Gerenciar Cargos` está ativada.", ephemeral=False)
+            await interaction.response.send_message(
+                "A aplicação não tem permissões suficientes para executar esse comando, verifique se a permissão de "
+                "`Gerenciar Cargos` está ativada.",
+                ephemeral=False)
         else:
             await interaction.response.send_message("Ocorreu um erro ao executar o comando.", ephemeral=False)
 

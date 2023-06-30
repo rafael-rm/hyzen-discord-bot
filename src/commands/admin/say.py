@@ -10,11 +10,9 @@ class SayCommand(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-
     @commands.Cog.listener()
     async def on_ready(self):
         logging.info(f'Carregado: {__name__}')
-
 
     @app_commands.command(name='say', description='Enviar embed com uma mensagem através do bot.')
     @app_commands.describe(mensagem='Mensagem a ser enviada através do bot.')
@@ -22,29 +20,32 @@ class SayCommand(commands.Cog):
     @app_commands.checks.has_permissions(manage_messages=True)
     async def say(self, interaction: discord.Interaction, *, mensagem: str):
         embed = discord.Embed(
-            title = '',
-            description = mensagem,
-            color = self.bot.color_embed_default,
-            timestamp = interaction.created_at,
+            title='',
+            description=mensagem,
+            color=self.bot.color_embed_default,
+            timestamp=interaction.created_at,
         )
 
         if interaction.user.avatar:
-            embed.set_footer(text=f'Enviado por {interaction.user.name}#{interaction.user.discriminator}', icon_url=interaction.user.avatar)
+            embed.set_footer(text=f'Enviado por {interaction.user.name}#{interaction.user.discriminator}',
+                             icon_url=interaction.user.avatar)
         else:
-            embed.set_footer(text=f'Enviado por {interaction.user.name}#{interaction.user.discriminator}', icon_url=interaction.user.default_avatar)
+            embed.set_footer(text=f'Enviado por {interaction.user.name}#{interaction.user.discriminator}',
+                             icon_url=interaction.user.default_avatar)
 
         await interaction.channel.send(embed=embed)
         await interaction.response.send_message("Comando executado com sucesso!", ephemeral=True, delete_after=3)
 
         await comando_executado(interaction, self.bot)
-        logging.info(f'Conteúdo enviado através do comando \'say\' executado por {interaction.user.id} no servidor {interaction.guild.id} no canal {interaction.channel.id}: "{mensagem}"')
-
+        logging.info(
+            f'Conteúdo enviado através do comando \'say\' executado por {interaction.user.id} no servidor {interaction.guild.id} no canal {interaction.channel.id}: "{mensagem}"')
 
     @say.error
     async def erros(self, interaction: discord.Interaction, error):
         await comando_executado_erro(interaction, error, critical=False)
         if isinstance(error, app_commands.MissingPermissions):
-            await interaction.response.send_message("Você não tem permissão para executar esse comando.", ephemeral=False)
+            await interaction.response.send_message("Você não tem permissão para executar esse comando.",
+                                                    ephemeral=False)
         else:
             await interaction.response.send_message("Ocorreu um erro ao executar o comando.", ephemeral=False)
 

@@ -17,30 +17,32 @@ class ButtonsDevelopersCommands(discord.ui.View):
         self.author = author
         super().__init__()
 
-
     @discord.ui.button(label="Baixar", style=discord.ButtonStyle.success, custom_id="download", emoji="📥")
     async def baixar_logs(self, interaction: discord.Interaction, button: discord.ui.Button):
         try:
             await interaction.response.send_message(file=discord.File('logs.log'))
-            logging.info(f"Arquivo de logs solicitado por {interaction.user.id} enviado no canal {interaction.channel.id}.")
+            logging.info(
+                f"Arquivo de logs solicitado por {interaction.user.id} enviado no canal {interaction.channel.id}.")
         except Exception as error:
-            logging.error(f"Erro ao enviar arquivo de logs solicitado por {interaction.user.id} no canal {interaction.channel.id}.")
+            logging.error(
+                f"Erro ao enviar arquivo de logs solicitado por {interaction.user.id} no canal {interaction.channel.id}.")
             logging.error(f"{error}")
             await interaction.response.send_message("Erro ao enviar arquivo de logs, verifique o console da aplicação.")
-
 
     @discord.ui.button(label="Apagar logs", style=discord.ButtonStyle.danger, custom_id="clear", emoji="🗑️")
     async def apagar_logs(self, interaction: discord.Interaction, button: discord.ui.Button):
         with open('logs.log', 'w') as f:
             f.write('')
-        logging.info(f"Solicitação para apagar arquivo de logs enviada por {interaction.user.id} no canal {interaction.channel.id}.")
+        logging.info(
+            f"Solicitação para apagar arquivo de logs enviada por {interaction.user.id} no canal {interaction.channel.id}.")
         await interaction.response.send_message("Arquivo de logs apagado com sucesso.")
-
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user.id != self.author.id:
-            await interaction.response.send_message("Você não possui permissão para utilizar esta interação.", ephemeral=True)
-            logging.warning(f"O usuário {interaction.user.id} tentou utilizar uma interação do comando de logs no servidor {interaction.guild.id} no canal {interaction.channel.id} sem permissão.")
+            await interaction.response.send_message("Você não possui permissão para utilizar esta interação.",
+                                                    ephemeral=True)
+            logging.warning(
+                f"O usuário {interaction.user.id} tentou utilizar uma interação do comando de logs no servidor {interaction.guild.id} no canal {interaction.channel.id} sem permissão.")
             return False
         return True
 
@@ -49,39 +51,37 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-
     @staticmethod
     def permissao_usar_cmd():
         def verificar_permissoes(interaction: discord.Interaction) -> bool:
             return permissao_desenvolvedor(interaction.user.id)
-        return app_commands.check(verificar_permissoes)
 
+        return app_commands.check(verificar_permissoes)
 
     @commands.Cog.listener()
     async def on_ready(self):
         logging.info(f'Carregado: {__name__}')
 
-
     @app_commands.command(name='ping', description='Mostra o ping da aplicação.')
     @permissao_usar_cmd()
-    async def ping(self, interaction: discord.Interaction): 
+    async def ping(self, interaction: discord.Interaction):
         await comando_executado(interaction, self.bot)
-        await interaction.response.send_message(f"A aplicação encontra-se com **{round(self.bot.latency * 1000)}ms** de latência") 
-
+        await interaction.response.send_message(
+            f"A aplicação encontra-se com **{round(self.bot.latency * 1000)}ms** de latência")
 
     @app_commands.command(name='ram', description='Mostra o uso de RAM da máquina.')
     @permissao_usar_cmd()
     async def ram(self, interaction: discord.Interaction):
         await comando_executado(interaction, self.bot)
-        await interaction.response.send_message(f"A máquina encontra-se utilizando **{psutil.virtual_memory().used / 1024 / 1024:.0f}/{psutil.virtual_memory().total / 1024 / 1024:.0f}MB ({psutil.virtual_memory().percent}%)** de RAM")
-
+        await interaction.response.send_message(
+            f"A máquina encontra-se utilizando **{psutil.virtual_memory().used / 1024 / 1024:.0f}/{psutil.virtual_memory().total / 1024 / 1024:.0f}MB ({psutil.virtual_memory().percent}%)** de RAM")
 
     @app_commands.command(name='cpu', description='Mostra o uso da CPU da máquina.')
     @permissao_usar_cmd()
     async def cpu(self, interaction: discord.Interaction):
         await comando_executado(interaction, self.bot)
-        await interaction.response.send_message(f"A máquina possui **{psutil.cpu_count()} núcleos lógicos** e está utilizando **{psutil.cpu_percent()}%** de sua capacidade total")
-
+        await interaction.response.send_message(
+            f"A máquina possui **{psutil.cpu_count()} núcleos lógicos** e está utilizando **{psutil.cpu_percent()}%** de sua capacidade total")
 
     @app_commands.command(name='sync', description='Sincroniza os comandos da aplicação.')
     @permissao_usar_cmd()
@@ -92,7 +92,6 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
         await self.bot.tree.sync()
         await interaction.channel.send('Aplicação sincronizada com o Discord.')
         logging.info('Aplicação sincronizada com o Discord.')
-
 
     @app_commands.command(name='shards', description='Mostra informações sobre as shards da aplicação.')
     @permissao_usar_cmd()
@@ -114,15 +113,14 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
             embed.description = mensagem
             await interaction.response.send_message(embed=embed)
 
-
     @app_commands.command(name='uptime', description='Mostra o tempo de atividade da aplicação.')
     @permissao_usar_cmd()
     async def uptime(self, interaction: discord.Interaction):
         await comando_executado(interaction, self.bot)
         time_now = datetime.datetime.now().timestamp()
         uptime = time_now - self.bot.time_start
-        await interaction.response.send_message(f"A aplicação está online há **{int(uptime / 3600)}h {int(uptime / 60) % 60}m {int(uptime % 60)}s**")
-
+        await interaction.response.send_message(
+            f"A aplicação está online há **{int(uptime / 3600)}h {int(uptime / 60) % 60}m {int(uptime % 60)}s**")
 
     @app_commands.command(name='status', description='Mostra o status da aplicação.')
     @permissao_usar_cmd()
@@ -140,10 +138,10 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
             \n**Guildas:** {len(self.bot.guilds)} \
             \n**Usuários:** {len(self.bot.users)} \
             \n**Uptime:** {int((datetime.datetime.now().timestamp() - self.bot.time_start) / 3600)}h {int((datetime.datetime.now().timestamp() - self.bot.time_start) / 60) % 60}m {int((datetime.datetime.now().timestamp() - self.bot.time_start) % 60)}s"
-        developer_id = self.bot.config.get('DEVELOPER', 'DEVELOPER_ID')
-        embed.set_footer(text=f'Aplicação desenvolvida por {self.bot.get_user(int(developer_id)).name}#{self.bot.get_user(int(developer_id)).discriminator}')
+        developer_id = self.bot.config.get('OWNER', 'OWNER_ID')
+        embed.set_footer(
+            text=f'Aplicação desenvolvida por {self.bot.get_user(int(developer_id)).name}#{self.bot.get_user(int(developer_id)).discriminator}')
         await interaction.response.send_message(embed=embed)
-
 
     @app_commands.command(name='logs', description='Exibe as últimas logs da aplicação.')
     @permissao_usar_cmd()
@@ -165,11 +163,11 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
             logs_enviar = f"{linha}\n{logs_enviar}"
 
         embed.description = f'```diff\n{logs_enviar}```' if erros else f'```autohotkey\n{logs_enviar}```'
-        embed.set_footer(text=f'Total de logs:  {len(logs.splitlines())}  ({round(os.path.getsize("logs.log") / 1024 / 1024, 2)}MB)')
+        embed.set_footer(
+            text=f'Total de logs:  {len(logs.splitlines())}  ({round(os.path.getsize("logs.log") / 1024 / 1024, 2)}MB)')
         view = ButtonsDevelopersCommands(interaction.user)
 
         await interaction.followup.send(view=view, embed=embed)
-
 
     @app_commands.command(name='backup', description='Faz um backup completo da aplicação.')
     @permissao_usar_cmd()
@@ -187,7 +185,6 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
         await interaction.edit_original_response(content="Backup concluído, arquivos enviados na DM.")
         os.remove('Backup.zip')
 
-
     @app_commands.command(name='configs', description='Lista todas as configurações da aplicação.')
     @permissao_usar_cmd()
     async def configs(self, interaction: discord.Interaction):
@@ -195,12 +192,14 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
         config = configparser.ConfigParser()
         config.read('config.conf')
         embed = discord.Embed(color=self.bot.color_embed_default)
-        embed.set_author(name=f"Configurações da aplicação {self.bot.user.name}#{self.bot.user.discriminator}", icon_url=self.bot.user.avatar)
+        embed.set_author(name=f"Configurações da aplicação {self.bot.user.name}#{self.bot.user.discriminator}",
+                         icon_url=self.bot.user.avatar)
 
         num_configs = 0
         for section in config.sections():
             num_configs += len(config.items(section))
-        embed.set_footer(text=f"config.conf ({round(os.path.getsize('config.conf') / 1024, 2)}KB) ({num_configs} configs)")
+        embed.set_footer(
+            text=f"config.conf ({round(os.path.getsize('config.conf') / 1024, 2)}KB) ({num_configs} configs)")
 
         mensagem = ""
         for section in config.sections():
@@ -210,7 +209,6 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
             mensagem += "\n"
         embed.description = f'Exibindo todas as configurações da aplicação presente no arquivo `config.conf`.\n```ini\n{mensagem}```'
         await interaction.response.send_message(embed=embed)
-
 
     @ping.error
     @ram.error
@@ -225,7 +223,8 @@ class DevelopersCommands(commands.GroupCog, name="desenvolvedor", description="C
     async def erros(self, interaction: discord.Interaction, error):
         await comando_executado_erro(interaction, error, critical=True)
         if isinstance(error, app_commands.CheckFailure):
-            await interaction.response.send_message("Você não tem permissão para executar esse comando.", ephemeral=False)
+            await interaction.response.send_message("Você não tem permissão para executar esse comando.",
+                                                    ephemeral=False)
         else:
             await interaction.response.send_message("Ocorreu um erro ao executar o comando.", ephemeral=False)
 

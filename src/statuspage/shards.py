@@ -21,7 +21,6 @@ class StatusPageShardsEvent(commands.Cog):
         self.metric_id = config.get('STATUSPAGE', 'METRIC_ID_SHARDS')
         self.api_key = str(os.getenv('STATUS_PAGE_API_KEY'))
 
-
     @commands.Cog.listener()
     async def on_ready(self):
         logging.info(f'Carregado: {__name__}')
@@ -41,7 +40,6 @@ class StatusPageShardsEvent(commands.Cog):
             logging.info('A aplicação não está configurada para enviar métricas de shards para Status Page.')
             return
 
-
     @tasks.loop(seconds=900)
     async def enviar_shards_status_page(self):
         if self.bot.is_testing == True:
@@ -49,10 +47,10 @@ class StatusPageShardsEvent(commands.Cog):
             return
 
         params = json.dumps({
-            'data' : {
-                        'timestamp': datetime.datetime.now().timestamp(),
-                        'value': self.bot.shard_count
-                    }
+            'data': {
+                'timestamp': datetime.datetime.now().timestamp(),
+                'value': self.bot.shard_count
+            }
         })
 
         headers = {"Content-Type": "application/json", "Authorization": "OAuth " + self.api_key}
@@ -62,11 +60,14 @@ class StatusPageShardsEvent(commands.Cog):
         request = requests.post(url, data=params, headers=headers)
 
         if request.status_code == 201:
-            logging.info(f'Numero de shards enviado para Status Page com sucesso. Status: {request.status_code}. Shards: {self.bot.shard_count}.')
+            logging.info(
+                f'Numero de shards enviado para Status Page com sucesso. Status: {request.status_code}. Shards: {self.bot.shard_count}.')
         else:
-            logging.error(f'Falha ao enviar o numero de shards para Status Page. Status: {request.status_code}. Shards: {self.bot.shard_count}.')
+            logging.error(
+                f'Falha ao enviar o numero de shards para Status Page. Status: {request.status_code}. Shards: {self.bot.shard_count}.')
             logging.error(f'Erro: {request.text}')
 
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(StatusPageShardsEvent(bot))
+

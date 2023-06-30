@@ -26,13 +26,12 @@ class App(commands.AutoShardedBot):
         self.color_embed_default = int(self.config['COLORS']['DEFAULT'])
         self.cache_comandos_executados = 0
 
-
     async def carregar(self):
         for folder in os.listdir('./src/commands/'):
             for file in os.listdir(f'./src/commands/{folder}'):
                 if file.endswith('.py'):
                     try:
-                        logging.info(f'Encontrado arquivo: {(f"./src/commands/{folder}/{file}")}')
+                        logging.info(f'Encontrado arquivo: {f"./src/commands/{folder}/{file}"}')
                         await self.load_extension(f'src.commands.{folder}.{file[:-3]}')
                     except Exception as error:
                         logging.error(f'{error}')
@@ -40,7 +39,7 @@ class App(commands.AutoShardedBot):
         for file in os.listdir('./src/events/'):
             if file.endswith('.py'):
                 try:
-                    logging.info(f'Encontrado arquivo: {(f"./src/events/{file}")}')
+                    logging.info(f'Encontrado arquivo: {f"./src/events/{file}"}')
                     await self.load_extension(f'src.events.{file[:-3]}')
                 except Exception as error:
                     logging.error(f'{error}')
@@ -48,11 +47,10 @@ class App(commands.AutoShardedBot):
         for file in os.listdir('./src/statuspage/'):
             if file.endswith('.py'):
                 try:
-                    logging.info(f'Encontrado arquivo: {(f"./src/statuspage/{file}")}')
+                    logging.info(f'Encontrado arquivo: {f"./src/statuspage/{file}"}')
                     await self.load_extension(f'src.statuspage.{file[:-3]}')
                 except Exception as error:
                     logging.error(f'{error}')
-
 
     async def iniciar(self):
         await App.carregar(self)

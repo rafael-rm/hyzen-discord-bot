@@ -8,11 +8,9 @@ class AutoRoleEvent(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-
     @commands.Cog.listener()
     async def on_ready(self):
         logging.info(f'Carregado: {__name__}')
-
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
@@ -27,7 +25,8 @@ class AutoRoleEvent(commands.Cog):
                 await member.add_roles(*cargos, reason='Cargo automático.')
 
                 for i in range(0, len(cargos)):
-                    logging.info(f'O autorole setou o cargo {cargos[i].id} para o usuário {member.id} no servidor {member.guild.id}.')
+                    logging.info(
+                        f'O autorole setou o cargo {cargos[i].id} para o usuário {member.id} no servidor {member.guild.id}.')
         except Exception as e:
             logging.error(f'Erro ao setar o autorole para o usuário {member.id} no servidor {member.guild.id}.')
             logging.error(e)

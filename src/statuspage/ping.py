@@ -21,7 +21,6 @@ class StatusPagePingEvent(commands.Cog):
         self.metric_id = config.get('STATUSPAGE', 'METRIC_ID_PING')
         self.api_key = str(os.getenv('STATUS_PAGE_API_KEY'))
 
-
     @commands.Cog.listener()
     async def on_ready(self):
         logging.info(f'Carregado: {__name__}')
@@ -41,7 +40,6 @@ class StatusPagePingEvent(commands.Cog):
             logging.info('A aplicação não está configurada para enviar métricas de ping para Status Page.')
             return
 
-
     @tasks.loop(seconds=300)
     async def enviar_ping_status_page(self):
         if self.bot.is_testing == True:
@@ -49,16 +47,17 @@ class StatusPagePingEvent(commands.Cog):
             return
 
         if (self.bot.time_start + 300) > datetime.datetime.now().timestamp():
-            logging.info('A aplicação acaba de iniciar, aguardando 5 minutos para enviar o primeiro ping para Status Page.')
+            logging.info(
+                'A aplicação acaba de iniciar, aguardando 5 minutos para enviar o primeiro ping para Status Page.')
             return
 
         ping = round(self.bot.latency * 1000)
 
         params = json.dumps({
-            'data' : {
-                        'timestamp': datetime.datetime.now().timestamp(),
-                        'value': ping
-                    }
+            'data': {
+                'timestamp': datetime.datetime.now().timestamp(),
+                'value': ping
+            }
         })
 
         headers = {"Content-Type": "application/json", "Authorization": "OAuth " + self.api_key}

@@ -12,11 +12,9 @@ class MixCommands(commands.GroupCog, name='mix', description='Comandos para orga
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-
     @commands.Cog.listener()
     async def on_ready(self):
         logging.info(f'Carregado: {__name__}')
-
 
     @app_commands.command(name='sortear', description='Sortear os jogadores mencionados em 2 times.')
     @app_commands.describe(jogador_1='Jogador a ser sorteado.')
@@ -29,7 +27,12 @@ class MixCommands(commands.GroupCog, name='mix', description='Comandos para orga
     @app_commands.describe(jogador_8='Jogador a ser sorteado.')
     @app_commands.describe(jogador_9='Jogador a ser sorteado.')
     @app_commands.describe(jogador_10='Jogador a ser sorteado.')
-    async def sortear(self, interaction: discord.Interaction, jogador_1: discord.Member = None, jogador_2: discord.Member = None, jogador_3: discord.Member = None, jogador_4: discord.Member = None, jogador_5: discord.Member = None, jogador_6: discord.Member = None, jogador_7: discord.Member = None, jogador_8: discord.Member = None, jogador_9: discord.Member = None, jogador_10: discord.Member = None):
+    async def sortear(self, interaction: discord.Interaction, jogador_1: discord.Member = None,
+                      jogador_2: discord.Member = None, jogador_3: discord.Member = None,
+                      jogador_4: discord.Member = None, jogador_5: discord.Member = None,
+                      jogador_6: discord.Member = None, jogador_7: discord.Member = None,
+                      jogador_8: discord.Member = None, jogador_9: discord.Member = None,
+                      jogador_10: discord.Member = None):
         jogadores = []
         time1 = []
         time2 = []
@@ -72,17 +75,19 @@ class MixCommands(commands.GroupCog, name='mix', description='Comandos para orga
         if len(time1) == 0 or len(time2) == 0:
             await interaction.response.send_message('É necessário mencionar pelo menos 2 jogadores.')
         else:
-            embed = discord.Embed(title='', description='Os dois times foram sorteados com sucesso.',  color=self.bot.color_embed_default)
+            embed = discord.Embed(title='', description='Os dois times foram sorteados com sucesso.',
+                                  color=self.bot.color_embed_default)
             embed.set_author(name='Sorteio dos times', icon_url='https://i.imgur.com/IfI5eub.png')
             embed.add_field(name='Time 1', value='\n'.join(time1), inline=True)
             embed.add_field(name='Time 2', value='\n'.join(time2), inline=True)
             if interaction.user.avatar:
-                embed.set_footer(text=f'Sorteio realizado por {interaction.user.name}', icon_url=interaction.user.avatar)
+                embed.set_footer(text=f'Sorteio realizado por {interaction.user.name}',
+                                 icon_url=interaction.user.avatar)
             else:
-                embed.set_footer(text=f'Sorteio realizado por {interaction.user.name}', icon_url=interaction.user.default_avatar)
+                embed.set_footer(text=f'Sorteio realizado por {interaction.user.name}',
+                                 icon_url=interaction.user.default_avatar)
             await interaction.response.send_message(embed=embed)
         await comando_executado(interaction, self.bot)
-
 
     @sortear.error
     async def erros(self, interaction: discord.Interaction, error):
